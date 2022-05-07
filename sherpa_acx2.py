@@ -4,7 +4,7 @@ from sherpa.models import model
 # Default spot is at {HOME}/atomdb
 # export ATOMDB=/Users/andy/atomdb
 # print( str(os.path.expanduser("~")) + "/atomdb")
-# os.environ["ATOMDB"] = str(os.path.expanduser("~"))  + "/atomdb"
+os.environ["ATOMDB"] = str(os.path.expanduser("~"))  + "/atomdb"
 
 import acx2 as acx2model
 
@@ -114,7 +114,7 @@ def _acx2(params, engs, flux):
   spec = acx2_acxmodelobject.calc_spectrum(params[1])
 
   # return the flux.
-  flux[:] = spec*1e10
+  flux = spec*1e10
   return flux
 
 class ACX2(model.RegriddableModel1D):
