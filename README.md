@@ -1,3 +1,7 @@
+# Note:
+
+This package provide an custermized verion of AtomDB's ACX2 model for Sherpa. It is still under development.  
+
 # AtomDB ACX Implementation 
 
 The AtomDB CX model is a model of charge exchange during a collision between a recombining charged ion and a donor atom or ion. The electron is transferred from the donor to the recombining ion, forming a recombined ion often in an excited state. As this recombined ion relaxes to its ground state, it releases a cascade of photons with relative intensities charactersitic of CX recombination.
