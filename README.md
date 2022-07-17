@@ -57,17 +57,11 @@ The files for each donor are:
 
 The ``acx2.py`` file contains a range of classes which can be used to model different aspects of the charge exchange. The basic principal is that the fits files contain the emissivity for each ion, broken down to reflect the way that Kronos handles the data.
 
-+------------------+-------------------------+-------------------------------------------------+
-|Kronos Resolution | Typical recombining ion | ACX2 handling                                   |
-+==================+=========================+=================================================+
-|n, l, S resolved  | hydrogenic              | Capture into each n, l, S                       |
-|                  | bare C,N,O,Ne           |                                                 |
-+------------------+-------------------------+-------------------------------------------------+
-|n resolved        | bare                    | Capture into each n, ACX for l distribution     |
-+------------------+-------------------------+-------------------------------------------------+
-|not included      | all others              | Capture into 2 n shells, ACX for l distribution |
-+------------------+-------------------------+-------------------------------------------------+
-
+| Kronos Resolution | Typical recombining ion  | ACX2 handling                                   |
+| ----------------- | ------------------------ | ----------------------------------------------- |
+| n, l, S resolved  | hydrogenic bare C,N,O,Ne | Capture into each n, l, s                       |
+| n resolved        | bare                     | Capture into each n, ACX for l distribution     |
+| not included      | all others               | Capture into 2 n shells, ACX for l distribution |
 To handle this, the acx2 module contains 4 levels of classes:
 
 - ``ACXModel`` : The overall ACX model. Can include multiple donor ACXDonorModel objects.
@@ -118,31 +112,19 @@ Once you have this, models can be used in pyxspec in the usual way, e.g.
 
 ## Model parameters
 
-+--------------+-----------------------------------------------------------------------------------+
-| Parameter    | Definition                                                                        |
-+==============+===================================================================================+
-| temperature  | Plasma temperature (keV). Used for recombining particle ion fraction              |
-+--------------+-----------------------------------------------------------------------------------+
-| collnpar     | Collsion parameter (kev/u,km/s). Reduced energy or velocity of collision          |
-+--------------+-----------------------------------------------------------------------------------+
-| collntype    | Sets meaning of collnpar:                                                         |
-+--------------+-----------------------------------------------------------------------------------+
-|              | 1 - center of mass energy (kev/u)                                                 |
-+--------------+-----------------------------------------------------------------------------------+
-|              | 2 - center of mass velocity (km/s)                                                |
-+--------------+-----------------------------------------------------------------------------------+
-|              | 3 - donor ion velocity (km/s)                                                     |
-+--------------+-----------------------------------------------------------------------------------+
-|              | 4 - recombining ion velocity (km/s)                                               |
-+--------------+-----------------------------------------------------------------------------------+
-| acxmodel     | ACX model to fall back on, from 1 to 8.                                           |
-+--------------+-----------------------------------------------------------------------------------+
-| recombtype   | single recombination (1) or all the way to neutral (2)                            |
-+--------------+-----------------------------------------------------------------------------------+
-| Hefrac       | Number fraction of donor which is He (remainder is H).                            |
-+--------------+-----------------------------------------------------------------------------------+
-| abund        | recombining elemental abundances. (given by individual element in vacx and vvacx) |
-+--------------+-----------------------------------------------------------------------------------+
+| Parameter   | Definition                                                                        |
+| ----------- | --------------------------------------------------------------------------------- |
+| temperature | Plasma temperature (keV). Used for recombining particle ion fraction              |
+| collnpar    | Collision parameter (kev/u,km/s). Reduced energy or velocity of collision         |
+| collntype   | Sets meaning of collnpar:                                                         |
+|             | 1 - center of mass energy (kev/u)                                                 |
+|             | 2 - center of mass velocity (km/s)                                                |
+|             | 3 - donor ion velocity (km/s)                                                     |
+|             | 4 - recombining ion velocity (km/s)                                               |
+| acxmodel    | ACX model to fall back on, from 1 to 8.                                           |
+| recombtype  | single recombination (1) or all the way to neutral (2)                            |
+| Hefrac      | Number fraction of donor which is He (remainder is H).                            |
+| abund       | recombining elemental abundances. (given by individual element in vacx and vvacx) |
 
 ### Note:
    The units for collision velocity in XSPEC are km/s, not cm/s as in the underlying ACX models. This is to keep the numbers closer to 1, which XSPEC likes.
