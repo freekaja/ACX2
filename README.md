@@ -1,3 +1,5 @@
+# AtomDB ACX Implementation 
+
 The AtomDB CX model is a model of charge exchange during a collision between a recombining charged ion and a donor atom or ion. The electron is transferred from the donor to the recombining ion, forming a recombined ion often in an excited state. As this recombined ion relaxes to its ground state, it releases a cascade of photons with relative intensities charactersitic of CX recombination.
 
 An original version of ACX was released in 2016, which used empirical formulae for CX emission of all ions of all the elements up to nickel. These formulae, crucially, did not include any velocity dependent effects, which are important for correctly calculating the n, l and S of the excited levels captured into. In addition, spectral information was hardwired and difficult to update, resulting in updates to AtomDB not often being reflected in the following charge exchange spectra.
@@ -8,20 +10,20 @@ Once Kronos or ACX1 have been used to calculate the correct capture cross sectio
 
 For a given interaction velocity or energy, the model uses the center of mass energy to obtain the cross section for capture into each shell from Kronos. For each shell where the cross section is greater than zero, a spectrum is calculated from the *line* and *cont* files. These are then multiplied by the appropriate cross section and summed to give the spectrum for CX of a particular ion.
 
-.. [1] Mullen, P. D., et al. ApJS 224, 31 (2016)
-.. [2] Mullen, P. D., et al. ApJ 844, 7 (2017)
-.. [3] Cumbee, R. S., et al. ApJ 852, 7 (2018)
+[1] Mullen, P. D., et al. ApJS 224, 31 (2016)
 
-=======================
-Installation
-=======================
+[2] Mullen, P. D., et al. ApJ 844, 7 (2017)
+
+[3] Cumbee, R. S., et al. ApJ 852, 7 (2018)
+
+# Installation
+
 Standard python installation
 
-.. code-block:: bash
 
-   python setup.py install
+     python setup.py install
 
-.. note::
+### Note:
    ACX2 is a python 3 only module. Depending on your system's setup, you may need to substitute ``python3`` for all references to ``python``.
 
 There are several useful flags that can be provided to this call, depending on your system:
@@ -30,30 +32,29 @@ There are several useful flags that can be provided to this call, depending on y
 
   - ``develop`` instead of ``install`` will install links to the current directory. This is useful if you want to edit/debug/develop the files further.
 
-=====
-Usage
-=====
+
+# Usage
 
 
 Each model in ACX2 can have an arbitrary set of donors. By default for the XSPEC model these are neutral H and He, but others may be selected. Additional input files will be required for these - please contact the project via the AtomDB or GitHub pages to make or discuss requests.
 
-----------
-Data Files
-----------
+
+## Data Files
+
 
 Each model requires a set of data files to be installed with it. As these files are large they cannot be exported through GitHub, and they should instead be downloaded from the AtomDB CX webpage, www.atomdb.org/CX.
 
 The files for each donor are:
-  - ``sigma`` files: the cross sections for capture into each n, l and S (depending on the ion) from the Kronos database
-  - ``line`` files: the line emission for capture into each n, l and S (depending on the ion) or each n and ACX1 l distribution for ions with no Kronos data
-  - ``cont`` files: same as line files, but including continuum emission. True continuum in CX is entirely 2-photon emission from H-, He- and Be-like ions.
+  - ``sigma`` files: the cross sections for capture into each `n`, `l` and `S` (depending on the ion) from the Kronos database
+  - ``line`` files: the line emission for capture into each `n`, `l` and `S` (depending on the ion) or each `n` and ACX1 `l` distribution for ions with no Kronos data
+  - ``cont`` files: same as line files, but including continuum emission. True continuum in CX is entirely 2-photon emission from `H-`, `He-` and `Be`-like ions.
 
-.. note::
+### Note:
   The emissivity data files have thousands of HDUs as currently assembled. Although these files read quickly in python, when opening in some programs (e.g. ``fv``) the load times can be upwards of 10 minutes. Rearranging these files to not cause this issue is a priority to fix.
 
--------
-Classes
--------
+
+## Classes
+
 The ``acx2.py`` file contains a range of classes which can be used to model different aspects of the charge exchange. The basic principal is that the fits files contain the emissivity for each ion, broken down to reflect the way that Kronos handles the data.
 
 +------------------+-------------------------+-------------------------------------------------+
@@ -78,9 +79,8 @@ To handle this, the acx2 module contains 4 levels of classes:
 - ``CXShellSpectrum`` : The actual spectrum from a single each n, l, S shell (or n, ldist shell).
 
 
------
-XSPEC
------
+## XSPEC
+
 
 To use the model in XSPEC, one can ignore the class details above. Unfortunately, the code only works with the XSPEC python interface, pyxspec_ for now. Before loading the code, you will need to edit the ``acx2_xspec.py`` file to change the data file paths.
 
@@ -92,23 +92,21 @@ To use the model in XSPEC, one can ignore the class details above. Unfortunately
 
 To load the ACX2 model into XSPEC, acx2_xspec module contains what you need. From a python3 shell:
 
-.. code-block:: python
-
-  # import the xspec python module
-  import xspec
-  # import  acx2 wrapper
-  import acx2_xspec
+      # import the xspec python module
+      import xspec
+      # import  acx2 wrapper
+      import acx2_xspec
 
 Once this is done, the data will load.
 
 
-Three different models are loaded:
+Three different models are available:
 
 - acx2 : Emission from CX with the 14 main elements. Abundance is tied between all elements (so there is only 1 abundance keyword). Analogous to the apec model.
 - vacx2 : Emission from CX with the 14 main elements. Abundance is free to vary between all the elements (though it starts frozen). Analagous to the vapec model.
 - vvacx2 : Emission from 27 elements, H through Ni excluding Co. Abundance is free to vary between all the elements.
 
-.. note::
+### Note:
   Note that in the acx and vacx cases, unlike in the apec and vapec models, the effective abundance of the minor recombining elements is 0, not solar. This speeds up calculation time and does not significantly effect the resulting emission.
 
 Once you have this, models can be used in pyxspec in the usual way, e.g.
@@ -118,9 +116,7 @@ Once you have this, models can be used in pyxspec in the usual way, e.g.
   m = xspec.Model('tbabs(pow+vacx2)')
 
 
-++++++++++++++++
-Model parameters
-++++++++++++++++
+## Model parameters
 
 +--------------+-----------------------------------------------------------------------------------+
 | Parameter    | Definition                                                                        |
@@ -148,27 +144,35 @@ Model parameters
 | abund        | recombining elemental abundances. (given by individual element in vacx and vvacx) |
 +--------------+-----------------------------------------------------------------------------------+
 
-.. note::
+### Note:
    The units for collision velocity in XSPEC are km/s, not cm/s as in the underlying ACX models. This is to keep the numbers closer to 1, which XSPEC likes.
 
-===============
-Version History
-===============
-1.0.0
+
+# Version History
+## 1.0.0
+
 March 15th 2019
 Initial release
 
-1.0.1
+## 1.0.1
 October 25th 2019
+
 Fixed error in vacx2 XSPEC interface, which specified but did not implement fluorine 
 leading to an off-by-one error for all higher-Z elements
 
-1.0.2
+## 1.0.2
 February 27th 2020
+
 Error in velocity unit conversion corrected, thanks to Gabrielle Betancourt-Martinez for reporting the bug. This will not have affected fits performed through XSPEC
 
-1.0.3
+## 1.0.3
 July 9th 2020
+
 Updated code for compatibility with changes in the PyAtomDB interface
 
 .. _pyxspec: https://heasarc.gsfc.nasa.gov/xanadu/xspec/python/html/index.html
+
+## 1.0.4 
+July 16, 2022
+
+Updated the code to interface with Sherpa
